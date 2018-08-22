@@ -1,12 +1,16 @@
 import api from "../../api";
-
+import session from "./../../utils/session";
 // initial state
 
 const state = {
   mepoList: [], // 啵啵列表
   total: 0, // 啵啵总数
   currentPage: 1, // 当前页
-  query: ""
+  query: "",
+  mepo: {
+    content: "",
+    user_id: session.his_id()
+  }
 };
 
 // getters
@@ -25,11 +29,21 @@ const actions = {
   },
   // 简历一条数据
   createMepo({ commit }, { mepo }) {
-    console.log(mepo);
-    api("mepo/create", mepo).then(r => {
-      console.log(r);
-      commit("setMepoList", r.data);
-    });
+    api("mepo/create", mepo)
+      .then(r => {
+        commit("setMepo", { content: "", user_id: session.his_id() });
+        return r.success;
+      })
+      .then(success => {
+        if (success) {
+          api("mepo/read").then(r => {
+            let result = r.data || [];
+            commit("setMepoList", result);
+            commit("setTotal", r.total);
+            commit("setCurrentPage", r.current);
+          });
+        }
+      });
   }
 };
 

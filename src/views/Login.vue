@@ -1,53 +1,37 @@
 <template>
   <v-container>
+
     <v-layout>
+      <!-- login -->
       <v-flex xs12 sm12 md8 offset-md2 lg6 offset-lg3 wrap>
         <v-card class="px-5 py-3 mt-5">
-
+          <!-- title -->
           <h3 class="headline mb-0">登录</h3>
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <!-- form -->
+          <v-form ref="form" v-model="valid" @submit.native.prevent="submit" lazy-validation>
             <!-- input control -->
             <v-text-field v-model="account" :rules="accountRules" label="账户" :error-messages="errors" required maxlength="18"></v-text-field>
-            <!-- verify code -->
-            <!-- <v-layout row wrap>
-              <v-flex v-if="signBy!='邮箱'" lg9 md9 sm6 xs12>
-                <v-text-field v-model="phone" :rules="phoneRules" label="手机号" required></v-text-field>
-              </v-flex>
-              <v-flex v-else lg9 md9 sm6 xs12>
-                <v-text-field v-model="mail" :rules="mailRules" label="邮箱号" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md3 lg3 d-flex>
-                <v-select :items="items" label="注册方式" placeholder="点此切换" v-model="signBy" @change="handleSignByChange"></v-select>
-              </v-flex>
-              <v-flex lg9 sm6 md6 xs12>
-                <v-text-field v-model="verifyCode" :rules="verifyCodeRules" label="验证码" required></v-text-field>
-              </v-flex>
-              <v-flex lg3 sm6 md6 xs12>
-                <v-btn block @click="handleGetVerifyCode" :disabled="captcha.cooldown != 0">
-                  <span v-if="captcha.cooldown">{{captcha.cooldown}}</span>
-                  <span v-else>发送验证码</span>
-                </v-btn>
-              </v-flex>
-            </v-layout> -->
 
             <v-text-field v-model="password" type="password" :rules="passwordRules" label="密码" required></v-text-field>
             <!-- action button -->
             <v-card-actions>
-              <v-btn :disabled="!valid" @click="submit">
+              <v-btn :disabled="!valid" type="submit">
                 登录
               </v-btn>
             </v-card-actions>
-
           </v-form>
         </v-card>
       </v-flex>
+
       <v-snackbar v-model="snackbar" :color="snackColor" right top multi-line :timeout="5000">
         {{ snackText }}
         <v-btn dark flat @click="snackbar = false">
           Close
         </v-btn>
       </v-snackbar>
+
     </v-layout>
+
   </v-container>
 </template>
 
@@ -56,9 +40,6 @@
 // import api from "./../api";
 import session from "./../utils/session.js";
 export default {
-  mounted() {
-    console.log(1);
-  },
   data: () => ({
     valid: true,
     timer: 0,
@@ -101,8 +82,6 @@ export default {
 
         session.exist(this.account, this.password).then(row => {
           if (!row) {
-            // this.login_failed = true;
-            // this.$Message.error("登录失败，请检查用户名或密码");
             this.snackbar = true;
             this.snackText = "登录失败，请检查用户名或密码";
             return;

@@ -1,12 +1,18 @@
 <template>
   <v-app>
-    <Nav></Nav>
+    <Nav/>
     <v-content>
       <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
     </v-content>
     <Footer/>
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" top right multi-line :timeout="3000">
+      {{ snackbar.text }}
+      <v-btn dark flat @click="handleSnackBarClose">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -19,6 +25,16 @@ export default {
   components: {
     Nav,
     Footer
+  },
+  methods: {
+    handleSnackBarClose() {
+      this.$store.dispatch("hideSnackBar");
+    }
+  },
+  computed: {
+    snackbar() {
+      return this.$store.state.snackbar;
+    }
   }
 };
 </script>

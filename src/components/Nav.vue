@@ -37,7 +37,7 @@
                 <v-list>
                     <template v-for="(item, index) in items">
                         <v-divider v-if="item.divider" :inset="item.inset" :key="index"></v-divider>
-                        <v-list-tile v-else :key="index" @click="handleMenuClick(item.path)">
+                        <v-list-tile v-else :key="index" @click="handleMenuClick(item)">
                             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                         </v-list-tile>
                     </template>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import session from "../utils/session";
 export default {
   data: () => {
     return {
@@ -61,7 +62,7 @@ export default {
         { title: "设置中心", path: "setting/account" },
         { title: "帮助中心" },
         { divider: true, insert: true },
-        { title: "登出", path: "login" }
+        { title: "登出", path: "login", actions: "logout" }
       ],
       title: "MePo",
       tile: false
@@ -69,7 +70,14 @@ export default {
   },
   methods: {
     handleMenuClick(params) {
-      this.$router.push(`/${params}`);
+      // 如果有特殊行为，执行特殊行为
+      if (params.actions && params.actions === "logout") {
+        session.logout("#/login");
+      }
+      // 如果指定了路由路径，那么路由跳转
+      if (params.path) {
+        this.$router.push(`/${params.path}`);
+      }
     }
   }
 };

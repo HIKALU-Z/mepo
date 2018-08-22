@@ -10,38 +10,33 @@
                 </v-card-title>
 
                 <v-list two-line>
-                    <template v-for="(item, index) in items">
-                        <v-subheader v-if="item.header" :key="item.header">
-                            {{ item.header }}
-                        </v-subheader>
+                    <template v-for="(item, index) in recommendationList">
+                        <v-divider v-if="index!=0" :inset="true" :key="`d${index}`"></v-divider>
 
-                        <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>
-
-                        <v-list-tile v-else :key="item.title" avatar @click="handleListClick">
+                        <v-list-tile :key="item.title" avatar @click="handleListClick">
                             <v-list-tile-avatar>
-                                <img :src="item.avatar">
+                                <img v-if="item.avatar_url" :src="item.avatar_url" alt="用户头像">
+                                <img v-else src="../../assets/avatar.jpg" alt="默认头像">
                             </v-list-tile-avatar>
 
                             <v-list-tile-content>
-                                <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                                <v-list-tile-title v-if="item.nickname" v-text="item.nickname"></v-list-tile-title>
+                                <!-- <v-list-tile-title v-else> -->
+                                <h4 class="mt-1" v-if="item.nickname" v-text="item.nickname"></h4>
+                                <h4 class="mt-1" v-else v-text="item.username"></h4>
+                                <!-- </v-list-tile-title> -->
+
+                                <!-- actions -->
                                 <v-list-tile-action>
-                                    <v-btn round small class="primary">
-                                        Follow
+                                    <v-btn v-if="hasFollowed(item.id)" round small class="dark" @click="handleUnFollow(item.id)">
+                                        取消关注
+                                    </v-btn>
+                                    <v-btn v-else round small class="primary" @click="handleFollow(item.id)">
+                                        关注
                                     </v-btn>
                                 </v-list-tile-action>
                             </v-list-tile-content>
-                            <!-- <v-list-tile-action>
-                                <v-list-tile-action-text>follow</v-list-tile-action-text>
-                                <v-icon v-if="selected.indexOf(index) < 0" color="grey lighten-1">
-                                    star_border
-                                </v-icon>
-                                <v-btn small flat icon class="primary">
-                                    <v-icon color="yellow darken-2">
-                                        star
-                                    </v-icon>
-                                </v-btn>
 
-                            </v-list-tile-action> -->
                         </v-list-tile>
                     </template>
                 </v-list>
@@ -63,36 +58,91 @@
 </template>
 
 <script>
+import api from "../../api";
+import session from "../../utils/session";
 export default {
+  created() {
+    this.user_id = session.his_id();
+    if (this.user_id) {
+      this.$store.dispatch("recommend/getRecommendationList", {
+        self_id: this.user_id
+      });
+    }
+  },
+  mounted() {
+    this.getFollowedList().then(() => {
+      this.getTimeLine();
+    });
+  },
   data() {
     return {
-      items: [
-        // { header: "Today" },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-          title: "Brunch this weekend?",
-          subtitle:
-            "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-          title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>',
-          subtitle:
-            "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend."
-        },
-        { divider: true, inset: true },
-        {
-          avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-          title: "Oui oui",
-          subtitle:
-            "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?"
-        }
-      ]
+      user_id: null,
+      followedList: []
     };
   },
   methods: {
-    handleListClick() {}
+    handleListClick() {
+      //TODO: 点击list跳转至相关用户的界面
+    },
+    // 点击关注按钮触发关注事件
+    handleFollow(id) {
+      if (!this.user_id) {
+        this.$store.dispatch("showSnackBar", { text: "尚未登录，请先登录" });
+        return;
+      }
+      api("user/bind", {
+        model: "user",
+        glue: {
+          [this.user_id]: id
+        }
+      }).then(() => {
+        this.getFollowedList();
+      });
+    },
+    // 点击关注按钮触发解绑事件
+    handleUnFollow(id) {
+      console.log(id);
+      api("user/unbind", {
+        model: "user",
+        glue: {
+          [this.user_id]: id
+        }
+      }).then(() => {
+        this.getFollowedList();
+      });
+    },
+    // 获取关注列表
+    getFollowedList() {
+      api("user/find", {
+        id: this.user_id,
+        with: [
+          {
+            relation: "belongs_to_many",
+            model: "user"
+          }
+        ]
+      }).then(r => {
+        this.followedList = r.data.$user || [];
+      });
+    },
+    getTimeLine() {},
+    /**
+     * 判断是否已关注
+     * @param id {Number} 对象 id
+     */
+    hasFollowed(id) {
+      if (!this.followedList) {
+        return false;
+      }
+      return !!this.followedList.find(item => {
+        return item.id == id;
+      });
+    }
+  },
+  computed: {
+    recommendationList() {
+      return this.$store.state.recommend.list;
+    }
   }
 };
 </script>

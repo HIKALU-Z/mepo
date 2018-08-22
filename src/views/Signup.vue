@@ -56,9 +56,6 @@ import api from "./../api";
 import { clearTimeout, setTimeout } from "timers";
 
 export default {
-  mounted() {
-    console.log(1);
-  },
   data: () => ({
     valid: true,
     timer: 0,

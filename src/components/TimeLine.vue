@@ -10,23 +10,27 @@
 <script>
 import MePoInput from "@/components/MePoInput.vue";
 import MePo from "@/components/MePo.vue";
-import api from "./../api";
+// import api from "./../api";
 export default {
   components: { MePoInput, MePo },
-  mounted() {
+  created() {
     this.getMePoList();
   },
   data() {
-    return {
-      mepoList: []
-    };
+    return {};
   },
   methods: {
-    // methods
+    /**
+     * 获取 mepo 列表
+     */
     getMePoList() {
-      api("mepo/read").then(r => {
-        this.mepoList = r.data || [];
-      });
+      this.$store.dispatch("mepo/getMepoList");
+    }
+  },
+  computed: {
+    // mepolist
+    mepoList() {
+      return this.$store.state.mepo.mepoList;
     }
   }
 };
