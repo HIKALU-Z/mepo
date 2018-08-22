@@ -12,9 +12,10 @@
 </template>
 
 <script>
-import Dashboard from "./../../components/setting/DashBoard";
+// import Dashboard from "./../../components/setting/DashBoard";
+import DashBoard from "@/components/setting/DashBoard.vue";
 export default {
-  components: { Dashboard }
+  components: { DashBoard }
 };
 </script>
 

@@ -19,8 +19,8 @@ const getters = {};
 // actions
 const actions = {
   // 获取宠物列表
-  getMepoList({ commit }) {
-    api("mepo/read").then(r => {
+  getMepoList({ commit }, { where = "", withProp = [] } = {}) {
+    api("mepo/read", { where: where, with: withProp }).then(r => {
       let result = r.data || [];
       commit("setMepoList", result);
       commit("setTotal", r.total);
@@ -31,7 +31,8 @@ const actions = {
   createMepo({ commit }, { mepo }) {
     api("mepo/create", mepo)
       .then(r => {
-        commit("setMepo", { content: "", user_id: session.his_id() });
+        // commit("setMepo", { content: "", user_id: session.his_id() });
+        mepo.content = "";
         return r.success;
       })
       .then(success => {
@@ -51,6 +52,7 @@ const actions = {
 const mutations = {
   // 设置宠物列表数据
   setMepoList(state, list) {
+    // console.log(list);
     state.mepoList = list;
   },
   setTotal(state, total) {

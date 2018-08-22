@@ -7,7 +7,7 @@
                     {{$route.params.username}}
                 </v-flex>
                 <v-flex lg6 md6>
-                    <TimeLine></TimeLine>
+                    <MePo v-for="item in mepoList" :key="item.id" :item="item"></MePo>
                 </v-flex>
                 <v-flex lg3 md3>
                     <Sidebar></Sidebar>
@@ -19,10 +19,26 @@
 
 <script>
 import ProfileCanopy from "@/components/common/ProfileCanopy.vue";
-import TimeLine from "@/components/TimeLine.vue";
+
 import Sidebar from "@/components/common/Sidebar.vue";
+import MePo from "../components/MePo.vue";
 export default {
-  components: { ProfileCanopy, TimeLine, Sidebar }
+  components: { ProfileCanopy, Sidebar, MePo },
+  created() {
+    this.getMepoList();
+  },
+  computed: {
+    mepoList() {
+      return this.$store.state.mepo.mepoList;
+    }
+  },
+  methods: {
+    getMepoList() {
+      const where = { user_id: 1 };
+      const withProp = ["has_one:user"];
+      this.$store.dispatch("mepo/getMepoList", { where, withProp });
+    }
+  }
 };
 </script>
 

@@ -1,6 +1,9 @@
+// core
 import Vue from "vue";
 import Vuex from "vuex";
+// modules
 import mepo from "./modules/mepo";
+import follow from "./modules/follow";
 import recommend from "./modules/recommend";
 
 Vue.use(Vuex);
@@ -8,6 +11,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   modules: {
     mepo,
+    follow,
     recommend
   },
   state: {

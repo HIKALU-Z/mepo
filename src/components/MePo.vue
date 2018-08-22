@@ -8,7 +8,7 @@
                     </v-avatar>
                 </v-flex>
                 <v-flex xs10 class="pl-2">
-                    <h4>HIKALU</h4>
+                    <h4>{{item.$user ? item.$user.username : '已注销'}}</h4>
                     <span>{{item.user_id}}</span>
                     <span>123123</span>
                 </v-flex>
@@ -49,7 +49,7 @@
 <script>
 export default {
   props: {
-    item: { default: 1 }
+    item: { default: {} }
   }
 };
 </script>

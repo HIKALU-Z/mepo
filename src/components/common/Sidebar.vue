@@ -16,7 +16,7 @@
                         <v-list-tile :key="item.title" avatar @click="handleListClick">
                             <v-list-tile-avatar>
                                 <img v-if="item.avatar_url" :src="item.avatar_url" alt="用户头像">
-                                <img v-else src="../../assets/avatar.jpg" alt="默认头像">
+                                <img v-else src="../../assets/default-avatar.png" alt="默认头像">
                             </v-list-tile-avatar>
 
                             <v-list-tile-content>
@@ -28,10 +28,10 @@
 
                                 <!-- actions -->
                                 <v-list-tile-action>
-                                    <v-btn v-if="hasFollowed(item.id)" round small class="dark" @click="handleUnFollow(item.id)">
+                                    <v-btn v-if="hasFollowed(item.id)" round small dark class="primary ml-2" @click="handleUnFollow(item.id)">
                                         取消关注
                                     </v-btn>
-                                    <v-btn v-else round small class="primary" @click="handleFollow(item.id)">
+                                    <v-btn v-else round small dark class="cyan ml-2" @click="handleFollow(item.id)">
                                         关注
                                     </v-btn>
                                 </v-list-tile-action>
@@ -61,23 +61,19 @@
 import api from "../../api";
 import session from "../../utils/session";
 export default {
+  // created 生命周期钩子
   created() {
     this.user_id = session.his_id();
     if (this.user_id) {
       this.$store.dispatch("recommend/getRecommendationList", {
         self_id: this.user_id
       });
+      this.getFollowedList();
     }
-  },
-  mounted() {
-    this.getFollowedList().then(() => {
-      this.getTimeLine();
-    });
   },
   data() {
     return {
-      user_id: null,
-      followedList: []
+      user_id: null
     };
   },
   methods: {
@@ -90,6 +86,7 @@ export default {
         this.$store.dispatch("showSnackBar", { text: "尚未登录，请先登录" });
         return;
       }
+
       api("user/bind", {
         model: "user",
         glue: {
@@ -101,7 +98,6 @@ export default {
     },
     // 点击关注按钮触发解绑事件
     handleUnFollow(id) {
-      console.log(id);
       api("user/unbind", {
         model: "user",
         glue: {
@@ -113,16 +109,8 @@ export default {
     },
     // 获取关注列表
     getFollowedList() {
-      api("user/find", {
-        id: this.user_id,
-        with: [
-          {
-            relation: "belongs_to_many",
-            model: "user"
-          }
-        ]
-      }).then(r => {
-        this.followedList = r.data.$user || [];
+      return this.$store.dispatch("follow/getFollowedList", {
+        self_id: this.user_id
       });
     },
     getTimeLine() {},
@@ -131,6 +119,7 @@ export default {
      * @param id {Number} 对象 id
      */
     hasFollowed(id) {
+      //   console.log(this.followedList);
       if (!this.followedList) {
         return false;
       }
@@ -142,6 +131,9 @@ export default {
   computed: {
     recommendationList() {
       return this.$store.state.recommend.list;
+    },
+    followedList() {
+      return this.$store.state.follow.list;
     }
   }
 };
