@@ -1,59 +1,59 @@
 <template>
-    <!-- <v-container fluid grid-list-lg app> -->
-    <v-layout column>
-        <v-flex xs12 lg12>
-            <v-card>
-                <v-card-title primary-title>
-                    <h4>
-                        推荐关注
-                    </h4>
-                </v-card-title>
+  <!-- <v-container fluid grid-list-lg app> -->
+  <v-layout column>
+    <v-flex xs12 lg12>
+      <v-card>
+        <v-card-title primary-title>
+          <h4>
+            推荐关注
+          </h4>
+        </v-card-title>
 
-                <v-list two-line>
-                    <template v-for="(item, index) in recommendationList">
-                        <v-divider v-if="index!=0" :inset="true" :key="`d${index}`"></v-divider>
+        <v-list two-line>
+          <template v-for="(item, index) in recommendationList">
+            <v-divider v-if="index!=0" :inset="true" :key="`d${index}`"></v-divider>
 
-                        <v-list-tile :key="item.title" avatar @click="handleListClick">
-                            <v-list-tile-avatar>
-                                <img v-if="item.avatar_url" :src="item.avatar_url" alt="用户头像">
-                                <img v-else src="../../assets/default-avatar.png" alt="默认头像">
-                            </v-list-tile-avatar>
+            <v-list-tile :key="item.title" avatar @click="handleListClick">
+              <v-list-tile-avatar>
+                <img v-if="item.avatar_url" :src="item.avatar_url" alt="用户头像">
+                <img v-else src="../../assets/ddyz.png" alt="默认头像">
+              </v-list-tile-avatar>
 
-                            <v-list-tile-content>
-                                <v-list-tile-title v-if="item.nickname" v-text="item.nickname"></v-list-tile-title>
-                                <!-- <v-list-tile-title v-else> -->
-                                <h4 class="mt-1" v-if="item.nickname" v-text="item.nickname"></h4>
-                                <h4 class="mt-1" v-else v-text="item.username"></h4>
-                                <!-- </v-list-tile-title> -->
+              <v-list-tile-content>
+                <v-list-tile-title v-if="item.nickname" v-text="item.nickname"></v-list-tile-title>
+                <!-- <v-list-tile-title v-else> -->
+                <h4 class="mt-1" v-if="item.nickname" v-text="item.nickname"></h4>
+                <h4 class="mt-1" v-else v-text="item.username"></h4>
+                <!-- </v-list-tile-title> -->
 
-                                <!-- actions -->
-                                <v-list-tile-action>
-                                    <v-btn v-if="hasFollowed(item.id)" round small dark class="primary ml-2" @click="handleUnFollow(item.id)">
-                                        取消关注
-                                    </v-btn>
-                                    <v-btn v-else round small dark class="cyan ml-2" @click="handleFollow(item.id)">
-                                        关注
-                                    </v-btn>
-                                </v-list-tile-action>
-                            </v-list-tile-content>
+                <!-- actions -->
+                <v-list-tile-action>
+                  <v-btn v-if="hasFollowed(item.id)" round small dark class="primary ml-2" @click="handleUnFollow(item.id)">
+                    取消关注
+                  </v-btn>
+                  <v-btn v-else round small dark class="cyan ml-2" @click="handleFollow(item.id)">
+                    关注
+                  </v-btn>
+                </v-list-tile-action>
+              </v-list-tile-content>
 
-                        </v-list-tile>
-                    </template>
-                </v-list>
-            </v-card>
-        </v-flex>
-        <v-flex xs12 lg12>
-            <v-card>
-                <v-card-media src=" http://static5.uk.businessinsider.com/image/58c55bcbdd0895f2478b4d67-480/christmas-mog-sainsburys.jpg" height="200px"></v-card-media>
+            </v-list-tile>
+          </template>
+        </v-list>
+      </v-card>
+    </v-flex>
+    <v-flex xs12 lg12>
+      <v-card>
+        <v-card-media src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535357618492&di=847b27311e6400a17a651a5dd0b625fd&imgtype=0&src=http%3A%2F%2Fimglf1.ph.126.net%2FRNvHEbXyQ8WSjCpzXoW6yg%3D%3D%2F6619117173816208528.jpg" height="200px"></v-card-media>
 
-                <v-card-actions>
-                    <v-btn flat color="orange">Share</v-btn>
-                    <v-btn flat color="orange">Explore</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-flex>
-    </v-layout>
-    <!-- </v-container> -->
+        <v-card-actions>
+          <v-btn flat color="orange">Share</v-btn>
+          <v-btn flat color="orange">Explore</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-flex>
+  </v-layout>
+  <!-- </v-container> -->
 
 </template>
 
