@@ -18,7 +18,7 @@ const getters = {};
 
 // actions
 const actions = {
-  // 获取宠物列表
+  // 获取 mepo 列表
   getMepoList({ commit }, { where = "", withProp = [] } = {}) {
     api("mepo/read", { where: where, with: withProp }).then(r => {
       let result = r.data || [];

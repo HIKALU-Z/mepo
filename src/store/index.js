@@ -2,15 +2,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
 // modules
-import mepo from "./modules/mepo";
-import follow from "./modules/follow";
-import recommend from "./modules/recommend";
+import mepo from "./modules/mepo"; // 微博数据中心
+import like from "./modules/like"; // 点赞mepo数据中心
+import follow from "./modules/follow"; // 关注列表数据中心
+import recommend from "./modules/recommend"; // 推荐列表数据中心
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     mepo,
+    like,
     follow,
     recommend
   },

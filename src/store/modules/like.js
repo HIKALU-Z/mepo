@@ -11,19 +11,19 @@ const getters = {};
 
 // actions
 const actions = {
-  // 获取关注列表
-  getFollowedList({ commit }, { self_id }) {
+  // 获取点赞列表
+  getLikedList({ commit }, { self_id }) {
     // return;
     return api("user/find", {
       id: self_id,
       with: [
         {
           relation: "belongs_to_many",
-          model: "user"
+          model: "mepo"
         }
       ]
     }).then(r => {
-      commit("setFollowedList", r.data.$user || []);
+      commit("setLikedList", r.data.$mepo || []);
     });
   }
 };
@@ -31,17 +31,11 @@ const actions = {
 // mutations
 const mutations = {
   // 设置已关注列表数据
-  setFollowedList(state, list) {
+  setLikedList(state, list) {
     state.list = list;
   },
   setTotal(state, total) {
     state.total = total;
-  },
-  setCurrentPage(state, current) {
-    state.currentPage = current;
-  },
-  setQuery(state, query) {
-    state.query = query;
   }
 };
 

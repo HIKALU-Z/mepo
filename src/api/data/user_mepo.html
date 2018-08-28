@@ -3,26 +3,22 @@
 <script>
     // api('MODEL/BIND', {
     //     left: 'user',
-    //     right: 'user',
-    //     left_key: 'follower_id',
-    //     right_key: 'target_id',
+    //     right: 'mepo'
     // })
 
     // api('user/bind', {
-    //     model: 'user',
+    //     model: 'mepo',
     //     glue: {
-    //         2: 1,
-    //         1: 2,
-    //         3: 1,
-    //         4: 1
+    //         1: 12,
+    //         // 1: 14
     //     },
     // });
-    
+
     api('user/read', {
         with: {
             relation: 'belongs_to_many',
-            model: "user",
-            only: ["id"]
+            model: "mepo",
+            // only: ["id"]
         }
     })
 </script>

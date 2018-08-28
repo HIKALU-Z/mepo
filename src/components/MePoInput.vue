@@ -33,6 +33,9 @@
                     啵一个
                 </v-btn>
                 <!-- </v-flex> -->
+                <v-flex>
+                    <input type="file" id="uploader" @change="handleFileUploader">
+                </v-flex>
             </v-layout>
         </v-card>
     </form>
@@ -62,6 +65,15 @@ export default {
       }
       this.$store.dispatch("mepo/createMepo", { mepo: this.mepo });
       //   this.mepo.content = "";
+    },
+    handleFileUploader() {
+      const uploader = document.getElementById("uploader");
+      let file = uploader.files[0];
+      let fd = new FormData();
+      fd.append("file", file);
+      fd.append("name", "my-file.jpg");
+      fd.append("age", 18);
+      console.log(file, fd);
     }
   },
   computed: {

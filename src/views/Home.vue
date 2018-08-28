@@ -1,6 +1,5 @@
 <template>
   <v-container fluid grid-list-md class="grey lighten-4">
-    <!-- <v-slide-y-transition mode="out-in"> -->
     <v-layout row wrap>
       <!-- personal info -->
       <v-flex xs3 v-if="$vuetify.breakpoint.lgAndUp">
@@ -17,7 +16,6 @@
         <Sidebar/>
       </v-flex>
     </v-layout>
-    <!-- </v-slide-y-transition> -->
   </v-container>
 </template>
 
@@ -49,7 +47,10 @@ export default {
      */
     getMepoList() {
       const where = [["user_id", "in", this.pluck(this.followedList, "id")]];
-      const withProp = ["has_one:user"];
+      const withProp = [
+        { relation: "has_one", model: "user" },
+        { relation: "belongs_to_many", model: "user", as: "belongsToUsers" }
+      ];
       // console.log(where);
       this.$store.dispatch("mepo/getMepoList", {
         where,
