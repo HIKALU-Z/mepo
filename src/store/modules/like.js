@@ -11,7 +11,7 @@ const getters = {};
 
 // actions
 const actions = {
-  // 获取点赞列表
+  // 获取用户下的点赞列表
   getLikedList({ commit }, { self_id }) {
     // return;
     return api("user/find", {
@@ -23,6 +23,7 @@ const actions = {
         }
       ]
     }).then(r => {
+      //   console.log(r.data);
       commit("setLikedList", r.data.$mepo || []);
     });
   }

@@ -1,12 +1,12 @@
 <script src="./../../../node_modules/axios/dist/axios.min.js"></script>
 <script src="./api.js"></script>
 <script>
-    // api('MODEL/BIND', {
-    //     left: 'user',
-    //     right: 'mepo'
-    // })
+    api('MODEL/BIND', {
+        left: 'user',
+        right: 'mepo'
+    })
 
-    // api('user/bind', {
+    // api('user/unbind', {
     //     model: 'mepo',
     //     glue: {
     //         1: 12,
@@ -14,11 +14,11 @@
     //     },
     // });
 
-    api('user/read', {
-        with: {
-            relation: 'belongs_to_many',
-            model: "mepo",
-            // only: ["id"]
-        }
-    })
+    // api('user/read', {
+    //     with: {
+    //         relation: 'belongs_to_many',
+    //         model: "mepo",
+    //         // only: ["id"]
+    //     }
+    // })
 </script>

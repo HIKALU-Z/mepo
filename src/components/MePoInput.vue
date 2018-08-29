@@ -33,9 +33,7 @@
                     啵一个
                 </v-btn>
                 <!-- </v-flex> -->
-                <v-flex>
-                    <input type="file" id="uploader" @change="handleFileUploader">
-                </v-flex>
+
             </v-layout>
         </v-card>
     </form>

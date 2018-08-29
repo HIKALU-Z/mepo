@@ -44,7 +44,10 @@
           <v-icon v-else left color="teal">
             mdi-heart-outline
           </v-icon>
-          {{item.$belongsToUsers ? item.$belongsToUsers.length : ''}}
+
+          <!-- {{item.$belongsToUsers ? item.$belongsToUsers.length : ''}} -->
+          <span v-if="likedCount>0"> {{ likedCount }}</span>
+
         </v-btn>
         <!-- 评论 -->
         <v-btn flat @click="handleShowComment">
@@ -55,6 +58,7 @@
       </v-card-actions>
       <Comment v-if="commentVisible" :mepoId="item.id"></Comment>
     </v-card>
+    {{item.$belongsToUsers}}
     <RemepoDialog v-if="remepoDialog" :dialog.sync="remepoDialog" :remepoFrom="item.id">
     </RemepoDialog>
   </div>
@@ -74,6 +78,7 @@ export default {
   },
   created() {
     this.$store.dispatch("like/getLikedList", { self_id: this.user_id });
+    this.getLikeCount(this.item.id);
   },
   data() {
     return {
@@ -82,7 +87,8 @@ export default {
       commentVisible: false,
       loading: true,
       user_id: session.his_id(),
-      like: false
+      like: false,
+      likedCount: ""
     };
   },
   computed: {
@@ -122,6 +128,7 @@ export default {
           }
         }).then(() => {
           this.$store.dispatch("like/getLikedList", { self_id: this.user_id });
+          this.getLikeCount(id);
         });
       } else {
         api("mepo/bind", {
@@ -131,16 +138,32 @@ export default {
           }
         }).then(() => {
           this.$store.dispatch("like/getLikedList", { self_id: this.user_id });
+          this.getLikeCount(id);
         });
       }
     },
     // 判断 mepo 是否已被点赞
     wasLiked(mepo_id) {
+      // console.log(this.likedList)
       if (!this.likedList) {
         return false;
       }
       return !!this.likedList.find(item => {
         return item.id == mepo_id;
+      });
+    },
+    getLikeCount(mepo_id) {
+      api("_bind__mepo_user/read", {
+        where: {
+          mepo_id,
+          user_id: this.user_id
+        }
+      }).then(r => {
+        if (!r.total) {
+          this.likedCount = "";
+        } else {
+          this.likedCount = r.total;
+        }
       });
     }
   },
