@@ -109,6 +109,10 @@ export default {
     },
     // 获取关注列表
     getFollowedList() {
+      this.$store.dispatch("follow/getFollowerNumber", {
+        self_id: this.user_id
+      });
+      this.$store.dispatch("follow/getFansNumber", { self_id: this.user_id });
       return this.$store.dispatch("follow/getFollowedList", {
         self_id: this.user_id
       });

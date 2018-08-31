@@ -15,15 +15,15 @@
                     <ul>
                         <li>
                             <h4>关注</h4>
-                            <span class="number">331</span>
+                            <span class="number">{{followerNumber}}</span>
                         </li>
                         <li>
                             <h4>粉丝</h4>
-                            <span class="number">123</span>
+                            <span class="number">{{fansNumber}}</span>
                         </li>
                         <li>
                             <h4>啵文</h4>
-                            <span class="number">1024</span>
+                            <span class="number">{{mepoNumber}}</span>
                         </li>
                     </ul>
                 </div>
@@ -38,7 +38,38 @@
 </template>
 
 <script>
-export default {};
+import session from "../../utils/session";
+import api from "../../api";
+export default {
+  data() {
+    return {
+      user_id: session.his_id()
+    };
+  },
+  created() {
+    this.$store.dispatch("follow/getFollowerNumber", { self_id: this.user_id });
+    this.$store.dispatch("follow/getFansNumber", { self_id: this.user_id });
+    this.$store.dispatch("mepo/getMepoNumber", { self_id: this.user_id });
+  },
+  methods: {
+    getDashBoardInfo(id) {
+      api("mepo/count", { where: { user_id: id } }).then(r => {
+        this.followerCount = r.data;
+      });
+    }
+  },
+  computed: {
+    followerNumber() {
+      return this.$store.state.follow.followerNumber;
+    },
+    fansNumber() {
+      return this.$store.state.follow.fansNumber;
+    },
+    mepoNumber() {
+      return this.$store.state.mepo.mepoNumber;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

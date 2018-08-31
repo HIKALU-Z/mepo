@@ -13,6 +13,7 @@
     "axios": "^0.18.0",
     "bulma": "^0.7.1",
     "register-service-worker": "^1.0.0",
+    "v-click-outside": "^2.0.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.19",

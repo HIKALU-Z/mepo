@@ -14,11 +14,27 @@
             <span>123123</span>
           </v-flex>
           <v-flex xs1>
-            <v-btn small icon>
+
+            <v-menu bottom left>
+              <v-btn slot="activator" icon>
+                <v-icon>mdi-chevron-down</v-icon>
+              </v-btn>
+
+              <v-list>
+                <v-list-tile @click="handleUnFollow(item.$user.id)">
+                  <v-list-tile-title>取消关注{{item.$user ? item.$user.username : ''}}</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="handleRemoveMepo(item.id)">
+                  <v-list-tile-title>删除米啵</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+
+            <!-- <v-btn small icon>
               <v-icon>
                 mdi-chevron-down
               </v-icon>
-            </v-btn>
+            </v-btn> -->
           </v-flex>
           <v-flex xs12>
             {{item.content}}
@@ -102,6 +118,14 @@ export default {
   methods: {
     handleMepoClick() {
       this.dialog = true;
+    },
+    // 取消关注
+    handleUnFollow(id) {
+      console.log(id);
+    },
+    // 删除一条 mepo
+    handleRemoveMepo(id) {
+      console.log(id);
     },
     // 显示评论
     handleShowComment() {

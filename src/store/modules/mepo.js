@@ -5,6 +5,7 @@ import session from "./../../utils/session";
 const state = {
   mepoList: [], // 啵啵列表
   total: 0, // 啵啵总数
+  mepoNumber: 0, // 某用户下的 mepo 总数
   currentPage: 1, // 当前页
   query: "",
   mepo: {
@@ -45,6 +46,13 @@ const actions = {
           });
         }
       });
+  },
+  getMepoNumber({ commit }, { self_id } = {}) {
+    api("mepo/count", {
+      where: { user_id: self_id }
+    }).then(r => {
+      commit("setMepoNumber", r.data || 0);
+    });
   }
 };
 
@@ -54,6 +62,9 @@ const mutations = {
   setMepoList(state, list) {
     // console.log(list);
     state.mepoList = list;
+  },
+  setMepoNumber(state, number) {
+    state.mepoNumber = number;
   },
   setTotal(state, total) {
     state.total = total;

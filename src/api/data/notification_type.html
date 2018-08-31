@@ -1,0 +1,28 @@
+<script src="./../../../node_modules/axios/dist/axios.min.js"></script>
+<script src="./api.js"></script>
+<script>
+    api('notification_type/create', {
+        name: "test",
+        tpl: 'hello {{name}}',
+        start_at: '2018-08-08',
+        end_at: '2018-09-15'
+    })
+
+    // api('user/bind', {
+    //     model: 'user',
+    //     glue: {
+    //         2: 1,
+    //         1: 2,
+    //         3: 1,
+    //         4: 1
+    //     },
+    // });
+
+    // api('user/read', {
+    //     with: {
+    //         relation: 'belongs_to_many',
+    //         model: "user",
+    //         only: ["id"]
+    //     }
+    // })
+</script>
